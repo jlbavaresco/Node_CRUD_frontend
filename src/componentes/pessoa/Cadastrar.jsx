@@ -35,7 +35,7 @@ class Cadastrar extends Component {
                     salario: this.state.objeto.salario,
                     cidade: this.state.objeto.cidade_codigo
                 };
-                const response = await fetch('http://'+config.enderecoapi+'/api/pessoas', {
+                const response = await fetch(config.enderecoapi+'/api/pessoas', {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -55,7 +55,7 @@ class Cadastrar extends Component {
                     salario: this.state.objeto.salario,
                     cidade: this.state.objeto.cidade_codigo
                 };
-                const response = await fetch('http://'+config.enderecoapi+'/api/pessoas', {
+                const response = await fetch(config.enderecoapi+'/api/pessoas', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -75,7 +75,7 @@ class Cadastrar extends Component {
         // aqui eu recupero um unico objeto passando o id
         // lembrar de na API no metodo que recupera pelo código mudar o formato da 
         // data para YYYY-MM-DD para exibir corretamente no campo
-        await fetch(`http://${config.enderecoapi}/api/pessoas/${codigo}`)
+        await fetch(`${config.enderecoapi}/api/pessoas/${codigo}`)
             .then(response => response.json())
             .then(data => this.setState({
                 objeto: data[0] // aqui pego o primeiro elemento do json que foi recuperado  data[0]
@@ -87,7 +87,7 @@ class Cadastrar extends Component {
 
     componentDidMount() {
         // if item exists, populate the state with proper data      
-        fetch('http://'+config.enderecoapi+'/api/cidades')
+        fetch(config.enderecoapi+'/api/cidades')
             .then((response) => {
                 return response.json();
             })

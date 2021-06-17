@@ -25,7 +25,7 @@ class Telefones extends Component {
         if (window.confirm("Remover este objeto?")) {
             try {
                 await fetch(
-                    `http://${config.enderecoapi}/api/telefones/${telefone.codigo}`,
+                    `${config.enderecoapi}/api/telefones/${telefone.codigo}`,
                     {
                         method: "DELETE",
                     }
@@ -44,7 +44,7 @@ class Telefones extends Component {
 
     recuperarTelefones = async codigo => {
         // aqui eu recupero um unico objeto passando o id
-        await fetch(`http://${config.enderecoapi}/api/telefones/${codigo}`)
+        await fetch(`${config.enderecoapi}/api/telefones/${codigo}`)
             .then(response => response.json())
             .then(data => this.setState({
                 telefones: data // aqui pego o primeiro elemento do json que foi recuperado  data[0]
@@ -57,7 +57,7 @@ class Telefones extends Component {
         // aqui eu recupero um unico objeto passando o id
         // lembrar de na API no metodo que recupera pelo código mudar o formato da 
         // data para YYYY-MM-DD para exibir corretamente no campo
-        await fetch(`http://${config.enderecoapi}/api/pessoas/${codigo}`)
+        await fetch(`${config.enderecoapi}/api/pessoas/${codigo}`)
             .then(response => response.json())
             .then(data => this.setState({
                 objeto: data[0] // aqui pego o primeiro elemento do json que foi recuperado  data[0]

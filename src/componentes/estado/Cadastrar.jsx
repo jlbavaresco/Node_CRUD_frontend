@@ -23,7 +23,7 @@ class Cadastrar extends Component {
                     nome: this.state.objeto.nome,
                     uf: this.state.objeto.uf
                 };
-                const response = await fetch('http://'+config.enderecoapi+'/api/estados', {
+                const response = await fetch(config.enderecoapi+'/api/estados', {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -42,7 +42,7 @@ class Cadastrar extends Component {
                     nome: this.state.objeto.nome,
                     uf: this.state.objeto.uf
                 };
-                const response = await fetch('http://'+config.enderecoapi+'/api/estados', {
+                const response = await fetch(config.enderecoapi+'/api/estados', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -60,7 +60,7 @@ class Cadastrar extends Component {
 
     recuperar = async codigo => {
         // aqui eu recupero um unico objeto passando o id
-        await fetch(`http://${config.enderecoapi}/api/estados/${codigo}`)
+        await fetch(`${config.enderecoapi}/api/estados/${codigo}`)
             .then(response => response.json())
             .then(data => this.setState({
                 objeto: data[0] // aqui pego o primeiro elemento do json que foi recuperado  data[0]

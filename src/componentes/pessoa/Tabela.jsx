@@ -18,7 +18,7 @@ class Tabela extends Component {
     }
 
     async getListaObjetos() {
-        await fetch('http://'+config.enderecoapi+'/api/pessoas')
+        await fetch(config.enderecoapi+'/api/pessoas')
             .then(response => response.json())
             .then(listaObjetos => this.setState({ listaObjetos }))
             .catch(err => console.log(err))
@@ -28,7 +28,7 @@ class Tabela extends Component {
         if (window.confirm("Remover este objeto?")) {
             try {
                 await fetch(
-                    `http://${config.enderecoapi}/api/pessoas/${objeto.codigo}`,
+                    `${config.enderecoapi}/api/pessoas/${objeto.codigo}`,
                     {
                         method: "DELETE",
                     }
