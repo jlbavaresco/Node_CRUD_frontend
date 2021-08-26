@@ -10,6 +10,10 @@ import Cidade from "./componentes/cidade/Cidade";
 import Pessoa from "./componentes/pessoa/Pessoa";
 import { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import'primereact/resources/themes/saga-blue/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
+
 
 class App extends Component {
   render() {

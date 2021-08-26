@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import config from '../../Config';
+import { Dropdown } from 'primereact/dropdown';
 
 class Cadastrar extends Component {
 
@@ -12,8 +13,48 @@ class Cadastrar extends Component {
             estado_codigo: this.props.objeto.estado_codigo,
         },
         estados: [],
-        redirecionar: false
+        redirecionar: false,
+        contries : [
+            { name: 'Australia', code: 'AU' },
+            { name: 'Brazil', code: 'BR' },
+            { name: 'China', code: 'CN' },
+            { name: 'Egypt', code: 'EG' },
+            { name: 'France', code: 'FR' },
+            { name: 'Germany', code: 'DE' },
+            { name: 'India', code: 'IN' },
+            { name: 'Japan', code: 'JP' },
+            { name: 'Spain', code: 'ES' },
+            { name: 'United States', code: 'US' }
+        ]
+        
     };
+
+    selectedCountryTemplate(option, props) {
+        if (option) {
+            return (
+                <div className="country-item country-item-value">
+                    <img alt={option.name} src="showcase/demo/images/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${option.code.toLowerCase()}`} />
+                    <div>{option.name}</div>
+                </div>
+            );
+        }
+
+        return (
+            <span>
+                {props.placeholder}
+            </span>
+        );
+    }
+
+    countryOptionTemplate(option) {
+        return (
+            <div className="country-item">
+                <img alt={option.name} src="showcase/demo/images/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${option.code.toLowerCase()}`} />
+                <div>{option.name}</div>
+            </div>
+        );
+    }    
+
 
     acaoCadastrar = async e => {
         var atualizaAlerta = this.props.atualizaAlerta;
@@ -25,7 +66,7 @@ class Cadastrar extends Component {
                     nome: this.state.objeto.nome,
                     estado: this.state.objeto.estado_codigo
                 };
-                const response = await fetch(config.enderecoapi+'/api/cidades', {
+                const response = await fetch(config.enderecoapi + '/api/cidades', {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -43,7 +84,7 @@ class Cadastrar extends Component {
                     nome: this.state.objeto.nome,
                     estado: this.state.objeto.estado_codigo
                 };
-                const response = await fetch(config.enderecoapi+'/api/cidades', {
+                const response = await fetch(config.enderecoapi + '/api/cidades', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -72,7 +113,7 @@ class Cadastrar extends Component {
 
     componentDidMount() {
         // if item exists, populate the state with proper data      
-        fetch(config.enderecoapi+'/api/estados')
+        fetch(config.enderecoapi + '/api/estados')
             .then((response) => {
                 return response.json();
             })
@@ -130,19 +171,23 @@ class Cadastrar extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="selectEstado" className="form-label">Estado</label>
-                        <select required className="form-control" id="selectEstado"
-                            defaultValue={this.props.estado_codigo} value={this.state.objeto.estado_codigo}
+                        
+                        <Dropdown style={{ padding: '0' }} 
+                        className="form-control" id="selectEstado"
+                        res
+                            value={this.state.objeto.estado_codigo}
+                            options={this.state.estados}
                             onChange={
                                 e => this.setState({
                                     objeto: {
                                         ...this.state.objeto, estado_codigo: e.target.value
                                     }
                                 })
-                            } >
-
-                            {this.state.estados.map((estadoitem) => <option key={estadoitem.value} value={estadoitem.value} >{estadoitem.display}</option>)}
-                        </select>
-
+                            }
+                            optionLabel="display"
+                            optionValue="value" filter  filterBy="display"
+                            placeholder="Selecione o estado" 
+                             />                            
                     </div>
 
                     <button type="submit" className="btn btn-success">
