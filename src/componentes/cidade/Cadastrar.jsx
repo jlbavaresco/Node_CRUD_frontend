@@ -14,7 +14,7 @@ class Cadastrar extends Component {
         },
         estados: [],
         redirecionar: false,
-        contries : [
+        contries: [
             { name: 'Australia', code: 'AU' },
             { name: 'Brazil', code: 'BR' },
             { name: 'China', code: 'CN' },
@@ -26,35 +26,8 @@ class Cadastrar extends Component {
             { name: 'Spain', code: 'ES' },
             { name: 'United States', code: 'US' }
         ]
-        
+
     };
-
-    selectedCountryTemplate(option, props) {
-        if (option) {
-            return (
-                <div className="country-item country-item-value">
-                    <img alt={option.name} src="showcase/demo/images/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${option.code.toLowerCase()}`} />
-                    <div>{option.name}</div>
-                </div>
-            );
-        }
-
-        return (
-            <span>
-                {props.placeholder}
-            </span>
-        );
-    }
-
-    countryOptionTemplate(option) {
-        return (
-            <div className="country-item">
-                <img alt={option.name} src="showcase/demo/images/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${option.code.toLowerCase()}`} />
-                <div>{option.name}</div>
-            </div>
-        );
-    }    
-
 
     acaoCadastrar = async e => {
         var atualizaAlerta = this.props.atualizaAlerta;
@@ -99,6 +72,8 @@ class Cadastrar extends Component {
         }
         this.setState({ redirecionar: true });
     };
+
+
     recuperar = async codigo => {
         // aqui eu recupero um unico objeto passando o id
         await fetch(`${config.enderecoapi}/api/cidades/${codigo}`)
@@ -111,22 +86,23 @@ class Cadastrar extends Component {
         //    " Nome: " + this.state.objeto.nome + " UF: " + this.state.objeto.uf)
     }
 
-    componentDidMount() {
-        // if item exists, populate the state with proper data      
-        fetch(config.enderecoapi + '/api/estados')
+    recuperarEstados = async () => {
+        await fetch(config.enderecoapi + '/api/estados')
             .then((response) => {
                 return response.json();
             })
             .then(data => {
-                let estadosDaApi = data.map(estado => {
-                    return { value: estado.codigo, display: estado.nome }
-                });
                 this.setState({
-                    estados: [{ value: '', display: '(Selecione o estado)' }].concat(estadosDaApi)
+                    estados: data
                 });
             }).catch(error => {
                 console.log(error);
             });
+    }
+
+    componentDidMount() {
+        // if item exists, populate the state with proper data      
+        this.recuperarEstados();
 
         if (this.props.editar) {
             this.recuperar(this.state.objeto.codigo);
@@ -171,10 +147,10 @@ class Cadastrar extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="selectEstado" className="form-label">Estado</label>
-                        
-                        <Dropdown style={{ padding: '0' }} 
-                        className="form-control" id="selectEstado"
-                        res
+
+                        <Dropdown style={{ padding: '0' }}
+                            className="form-control" id="selectEstado"
+                            res
                             value={this.state.objeto.estado_codigo}
                             options={this.state.estados}
                             onChange={
@@ -184,10 +160,10 @@ class Cadastrar extends Component {
                                     }
                                 })
                             }
-                            optionLabel="display"
-                            optionValue="value" filter  filterBy="display"
-                            placeholder="Selecione o estado" 
-                             />                            
+                            optionLabel="nome"
+                            optionValue="codigo" filter filterBy="nome"
+                            placeholder="Selecione o estado"
+                        />
                     </div>
 
                     <button type="submit" className="btn btn-success">

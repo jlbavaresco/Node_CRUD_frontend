@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import config from '../../Config';
+import { Dropdown } from 'primereact/dropdown';
 
 class Cadastrar extends Component {
 
@@ -85,26 +86,34 @@ class Cadastrar extends Component {
         //    " Nome: " + this.state.objeto.nome + " Nascimento: " + this.state.objeto.nascimento)
     }
 
-    componentDidMount() {
-        // if item exists, populate the state with proper data      
-        fetch(config.enderecoapi+'/api/cidades')
+    recuperarCidades = async () => {
+        await fetch(config.enderecoapi + '/api/cidades')
             .then((response) => {
                 return response.json();
             })
             .then(data => {
-                let cidadesDaApi = data.map(cidade => {
-                    return { value: cidade.codigo, display: cidade.nome }
-                });
                 this.setState({
-                    cidades: [{ value: '', display: '(Selecione a cidade)' }].concat(cidadesDaApi)
+                    cidades: data
                 });
             }).catch(error => {
                 console.log(error);
             });
+    }    
+
+    componentDidMount() {   
+        this.recuperarCidades();
         // Caso edição recupera da API o objeto
         if (this.props.editar) {
             this.recuperar(this.state.objeto.codigo);
         }
+    }
+
+    cidadeOptionTemplate(option) {
+        return (
+            <div >
+                {option.codigo} - {option.nome}
+            </div>
+        );
     }
 
 
@@ -169,18 +178,23 @@ class Cadastrar extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="selectCidade" className="form-label">Cidade</label>
-                        <select required className="form-control" id="selectCidade"
-                            defaultValue={this.props.cidade_codigo} value={this.state.objeto.cidade_codigo}
+                        <Dropdown style={{ padding: '0' }}
+                            className="form-control" id="selectCidade"
+                            res
+                            value={this.state.objeto.cidade_codigo}
+                            options={this.state.cidades}
                             onChange={
                                 e => this.setState({
                                     objeto: {
                                         ...this.state.objeto, cidade_codigo: e.target.value
                                     }
                                 })
-                            } >
-
-                            {this.state.cidades.map((cidadeitem) => <option key={cidadeitem.value} value={cidadeitem.value} >{cidadeitem.display}</option>)}
-                        </select>
+                            }
+                            optionLabel="nome"
+                            optionValue="codigo" filter filterBy="nome"
+                            placeholder="Selecione a Cidade"
+                            itemTemplate={this.cidadeOptionTemplate} 
+                        />                        
 
                     </div>
 
